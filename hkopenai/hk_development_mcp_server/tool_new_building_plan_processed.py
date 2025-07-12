@@ -7,6 +7,20 @@ import csv
 import io
 import requests
 from typing import Dict, List, Union
+from pydantic import Field
+from typing_extensions import Annotated
+
+
+def register(mcp):
+    """Registers the new building plan processed tool with the FastMCP server."""
+    @mcp.tool(
+        description="Retrieve data on the number of plans processed by the Building Authority in Hong Kong for new buildings within a specified year range."
+    )
+    def get_new_building_plans_processed(
+        start_year: Annotated[int, Field(description="Start year for data range")],
+        end_year: Annotated[int, Field(description="End year for data range")],
+    ) -> List[Dict[str, Union[str, int]]]:
+        return _get_new_building_plans_processed(start_year, end_year)
 
 
 def fetch_building_plan_data(url: str) -> List[Dict[str, Union[str, int]]]:
@@ -29,7 +43,7 @@ def fetch_building_plan_data(url: str) -> List[Dict[str, Union[str, int]]]:
     return data
 
 
-def get_new_building_plans_processed(
+def _get_new_building_plans_processed(
     start_year: int, end_year: int
 ) -> List[Dict[str, Union[str, int]]]:
     """
