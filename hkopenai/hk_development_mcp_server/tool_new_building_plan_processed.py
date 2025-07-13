@@ -5,14 +5,15 @@ This module provides tools to retrieve data from public sources regarding buildi
 
 import csv
 import io
-import requests
 from typing import Dict, List, Union
+import requests
 from pydantic import Field
 from typing_extensions import Annotated
 
 
 def register(mcp):
     """Registers the new building plan processed tool with the FastMCP server."""
+
     @mcp.tool(
         description="Retrieve data on the number of plans processed by the Building Authority in Hong Kong for new buildings within a specified year range."
     )

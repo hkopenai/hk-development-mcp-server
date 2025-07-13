@@ -1,3 +1,6 @@
+"""
+Unit tests for the HK Development MCP Server.
+"""
 import unittest
 from unittest.mock import patch, Mock
 from hkopenai.hk_development_mcp_server.server import create_mcp_server
@@ -12,7 +15,9 @@ class TestApp(unittest.TestCase):
     """
 
     @patch("hkopenai.hk_development_mcp_server.server.FastMCP")
-    @patch("hkopenai.hk_development_mcp_server.tool_new_building_plan_processed.register")
+    @patch(
+        "hkopenai.hk_development_mcp_server.tool_new_building_plan_processed.register"
+    )
     def test_create_mcp_server(self, mock_register, mock_fastmcp):
         """
         Test the creation of the MCP server and tool registration.

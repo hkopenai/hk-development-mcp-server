@@ -7,7 +7,9 @@ This module contains unit tests for fetching and filtering new building plan dat
 import unittest
 from unittest.mock import patch, MagicMock
 
-from hkopenai.hk_development_mcp_server.tool_new_building_plan_processed import _get_new_building_plans_processed
+from hkopenai.hk_development_mcp_server.tool_new_building_plan_processed import (
+    _get_new_building_plans_processed,
+)
 from hkopenai.hk_development_mcp_server.tool_new_building_plan_processed import register
 
 
@@ -81,7 +83,9 @@ class TestNewBuildingPlanProcessed(unittest.TestCase):
         decorated_function = mock_decorator.call_args[0][0]
 
         # Verify the name of the decorated function
-        self.assertEqual(decorated_function.__name__, "get_new_building_plans_processed")
+        self.assertEqual(
+            decorated_function.__name__, "get_new_building_plans_processed"
+        )
 
         # Call the decorated function and verify it calls _get_new_building_plans_processed
         with patch(
