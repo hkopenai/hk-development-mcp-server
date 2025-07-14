@@ -6,7 +6,7 @@ This module initiates the server when run as a script.
 
 
 from hkopenai_common.cli_utils import cli_main
-from .server import server
+from .server import create_mcp_server
 
 if __name__ == "__main__":
-    cli_main(server, "HK Development MCP Server")
+    cli_main(create_mcp_server, "HK Development MCP Server")
