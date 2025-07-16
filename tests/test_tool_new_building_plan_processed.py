@@ -7,10 +7,12 @@ This module contains unit tests for fetching and filtering new building plan dat
 import unittest
 from unittest.mock import patch, MagicMock
 
-from hkopenai.hk_development_mcp_server.tool_new_building_plan_processed import (
+from hkopenai.hk_development_mcp_server.tools.new_building_plan_processed import (
     _get_new_building_plans_processed,
 )
-from hkopenai.hk_development_mcp_server.tool_new_building_plan_processed import register
+from hkopenai.hk_development_mcp_server.tools.new_building_plan_processed import (
+    register,
+)
 
 
 class TestNewBuildingPlanProcessed(unittest.TestCase):
@@ -28,18 +30,33 @@ class TestNewBuildingPlanProcessed(unittest.TestCase):
         This test verifies that the function correctly filters data by year range,
         returns empty results for non-matching years, and handles partial year matches.
         """
-        # Mock the CSV data
-        mock_csv_data = """Year,Month,First Submission & Major Revision,Re-submission,Total
-2019,1,100,50,150
-2019,2,120,60,180
-2020,1,110,55,165"""
 
-        with patch("requests.get") as mock_requests_get:
-            # Setup mock response
-            mock_response = MagicMock()
-            mock_response.raise_for_status.return_value = None
-            mock_response.content = mock_csv_data.encode("utf-8")
-            mock_requests_get.return_value = mock_response
+        with patch(
+            "hkopenai.hk_development_mcp_server.tools.new_building_plan_processed.fetch_csv_from_url"
+        ) as mock_fetch_csv_from_url:
+            mock_fetch_csv_from_url.return_value = [
+                {
+                    "Year": "2019",
+                    "Month": "1",
+                    "First Submission & Major Revision": "100",
+                    "Re-submission": "50",
+                    "Total": "150",
+                },
+                {
+                    "Year": "2019",
+                    "Month": "2",
+                    "First Submission & Major Revision": "120",
+                    "Re-submission": "60",
+                    "Total": "180",
+                },
+                {
+                    "Year": "2020",
+                    "Month": "1",
+                    "First Submission & Major Revision": "110",
+                    "Re-submission": "55",
+                    "Total": "165",
+                },
+            ]
 
             # Test filtering by year range
             result = _get_new_building_plans_processed(2019, 2019)
@@ -89,7 +106,7 @@ class TestNewBuildingPlanProcessed(unittest.TestCase):
 
         # Call the decorated function and verify it calls _get_new_building_plans_processed
         with patch(
-            "hkopenai.hk_development_mcp_server.tool_new_building_plan_processed._get_new_building_plans_processed"
+            "hkopenai.hk_development_mcp_server.tools.new_building_plan_processed._get_new_building_plans_processed"
         ) as mock_get_new_building_plans_processed:
             decorated_function(start_year=2018, end_year=2019)
             mock_get_new_building_plans_processed.assert_called_once_with(2018, 2019)
