@@ -46,6 +46,9 @@ def _get_new_building_plans_processed(
     url = "https://static.data.gov.hk/bd/opendata/monthlydigests/Md11.csv"
     data = fetch_csv_from_url(url, encoding="utf-8-sig")
 
+    if "error" in data:
+        return data
+
     # Filter data based on the year range
     filtered_data = [row for row in data if start_year <= int(row["Year"]) <= end_year]
 
